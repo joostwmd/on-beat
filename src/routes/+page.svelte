@@ -1,7 +1,5 @@
 <script>
-	import { goto } from '$app/navigation';
+	import Login from '$lib/components/Login.svelte';
 </script>
 
-<h1>landing page</h1>
-
-<button on:click={() => goto('newplaylist')}>enter</button>
+<Login />

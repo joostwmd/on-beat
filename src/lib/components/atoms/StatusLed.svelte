@@ -1,5 +1,7 @@
 <script lang="ts">
-	export let status: 'success' | 'warning' | 'error';
+	import type { TLedStatus } from '$lib/spotifyClient/types';
+
+	export let status: TLedStatus;
 </script>
 
 <div id="led-outline" class="flex flex-col items-center p-1">

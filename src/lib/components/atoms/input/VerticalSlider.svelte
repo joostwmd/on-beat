@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { MAX_BPM, MIN_BPM } from '$lib/spotifyClient/constants';
+
 	export let value: number;
 	export let handleOnInput: (val: number) => void;
 </script>
@@ -9,8 +11,8 @@
 		type="range"
 		on:input={(e) => handleOnInput(e.target.value)}
 		bind:value
-		min="80"
-		max="180"
+		min={MIN_BPM}
+		max={MAX_BPM}
 		step="1"
 	/>
 </div>

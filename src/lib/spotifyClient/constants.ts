@@ -270,3 +270,6 @@ export function transformSpotifySeedData(seeds: any[]) {
 		seed_genres: seedGenres.join(',')
 	};
 }
+
+export const MIN_BPM = 80;
+export const MAX_BPM = 200;

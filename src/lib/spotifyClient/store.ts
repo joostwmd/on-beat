@@ -1,5 +1,6 @@
 import { writable } from 'svelte/store';
 import type { TSeed, TChannels, TBpm, TBpmOrderSetting, TKeySetting } from './types';
+import { MAX_BPM, MIN_BPM } from './constants';
 
 export type TStore = {
 	name: string;
@@ -15,7 +16,7 @@ export type TStore = {
 const initialState: TStore = {
 	name: '',
 	description: '',
-	bpm: { min: 0, max: 0 },
+	bpm: { min: MIN_BPM, max: MAX_BPM },
 	seeds: [],
 	playlists: [],
 	channels: {

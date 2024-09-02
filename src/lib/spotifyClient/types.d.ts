@@ -120,3 +120,5 @@ export type TBpmOrderSetting = {
 	value: TBpmOrderVariants;
 	active: boolean;
 };
+
+export type TLedStatus = 'success' | 'warning' | 'error';

@@ -31,4 +31,8 @@
 	#rect-button:active {
 		transform: translateY(2px); /* Simulate button press */
 	}
+
+	#rect-button:disabled {
+		cursor: not-allowed; /* Change cursor to indicate the button is not clickable */
+	}
 </style>

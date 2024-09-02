@@ -2,6 +2,7 @@
 	import Button from '$lib/components/atoms/Button.svelte';
 	import Screen from '$lib/components/atoms/Screen.svelte';
 	import store, { updateKeyValue } from '$lib/spotifyClient/store';
+	import TextCard from '../cards/TextCard.svelte';
 
 	export let isEnabled: boolean;
 
@@ -21,8 +22,8 @@
 
 <div class="flex space-between">
 	<Button {isEnabled} onClick={handlePreviousKeyClick} icon="back" />
-	<div class="w-12">
-		<Screen content={$store.key.value} />
+	<div class="w-16 aspect-square">
+		<TextCard text={$store.key.value} isSelected={$store.key.active} />
 	</div>
 	<Button {isEnabled} onClick={handleNextKeyClick} icon="back" />
 </div>

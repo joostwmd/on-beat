@@ -1,6 +1,6 @@
 <script lang="ts">
 	export let isSelected: boolean;
-	export let onClick: () => void;
+	export let onClick: () => void = () => {};
 	export let text: string;
 	import Pad from '$lib/components/atoms/Pad.svelte';
 </script>

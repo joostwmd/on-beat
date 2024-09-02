@@ -14,13 +14,13 @@
 <div class="flex space-x-4">
 	<TextCard
 		text="BPM ASC"
-		isSelected={displayValue === 'bpm-ascending'}
+		isSelected={displayValue === 'bpm-ascending' && $store.bpmOrder.active}
 		onClick={() => handleClick('bpm-ascending')}
 	/>
 
 	<TextCard
 		text="BPM DESC"
-		isSelected={displayValue === 'bpm-descending'}
+		isSelected={displayValue === 'bpm-descending' && $store.bpmOrder.active}
 		onClick={() => handleClick('bpm-descending')}
 	/>
 </div>

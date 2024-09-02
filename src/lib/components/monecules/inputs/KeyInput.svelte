@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Button from '$lib/components/atoms/Button.svelte';
-	import Screen from '$lib/components/atoms/Screen.svelte';
 	import store, { updateKeyValue } from '$lib/spotifyClient/store';
 	import TextCard from '../cards/TextCard.svelte';
 

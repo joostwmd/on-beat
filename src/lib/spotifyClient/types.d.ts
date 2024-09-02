@@ -98,7 +98,7 @@ export type TGenre = {
 
 export type TSeed = TSpotifyItemCard | TGenre;
 
-export type TChannelVariants = 'energy' | 'danceability' | 'liveness' | 'speechiness';
+export type TChannelVariants = 'energy' | 'danceability' | 'liveness' | 'popularity';
 
 export type TBpm = {
 	min: number;

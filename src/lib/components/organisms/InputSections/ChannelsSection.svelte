@@ -1,9 +1,8 @@
 <script lang="ts">
-	import store from '$lib/spotifyClient/store';
 	import ChannelInput from '$lib/components/monecules/inputs/ChannelInput.svelte';
-	import type { TChannelTypes } from '$lib/spotifyClient/types';
+	import type { TChannelVariants } from '$lib/spotifyClient/types';
 
-	const CHANNELS: TChannelTypes[] = ['danceability', 'energy', 'liveness', 'speechiness'];
+	const CHANNELS: TChannelVariants[] = ['danceability', 'energy', 'liveness', 'popularity'];
 </script>
 
 <div class="mt-24 flex flex-col w-full">

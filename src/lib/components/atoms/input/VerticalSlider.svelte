@@ -1,9 +1,18 @@
 <script lang="ts">
 	export let value: number;
+	export let handleOnInput: (val: number) => void;
 </script>
 
 <div id="vertical-slider-wrapper">
-	<input id="vertical-slider" type="range" bind:value min="80" max="240" step="1" />
+	<input
+		id="vertical-slider"
+		type="range"
+		on:input={(e) => handleOnInput(e.target.value)}
+		bind:value
+		min="80"
+		max="180"
+		step="1"
+	/>
 </div>
 
 <style>

@@ -2,6 +2,7 @@
 	export let isEnabled = true;
 	export let value: number;
 	export let placeholder: string = '';
+	export let handleOnInput: (val: number) => void;
 </script>
 
 <input
@@ -11,6 +12,7 @@
 	bind:value
 	style="background-color: transparent !important"
 	disabled={!isEnabled}
+	on:input={(e) => handleOnInput(parseFloat(e.target?.value))}
 />
 
 <style>

@@ -1,12 +1,6 @@
 <script lang="ts">
 	import FabButton from '$lib/components/FabButton.svelte';
-	import store, {
-		updateMinBpm,
-		updateMaxBpm,
-		removeSeed,
-		updateDescription,
-		updateName
-	} from '$lib/spotifyClient/store';
+	import store from '$lib/spotifyClient/store';
 	import { generatePlaylist } from '$lib/spotifyClient/methods/generatePlaylist';
 
 	import ReferencesSection from '$lib/components/organisms/InputSections/ReferencesSection.svelte';
@@ -15,21 +9,15 @@
 	import KeySection from '$lib/components/organisms/InputSections/KeySection.svelte';
 	import OrderSection from '$lib/components/organisms/InputSections/OrderSection.svelte';
 	import PlaylistDataSection from '$lib/components/organisms/InputSections/PlaylistDataSection.svelte';
-	import StatusLed from '$lib/components/atoms/StatusLed.svelte';
-	import OnOffToggle from '$lib/components/atoms/OnOffToggle.svelte';
 
 	let playlistGenerated: boolean = false;
 	let playlistLink: string = '';
 
 	let name = $store.name;
 	let description = $store.description;
-	let minBpm = $store.minBpm;
-	let maxBpm = $store.maxBpm;
+	let minBpm = $store.bpm.min;
+	let maxBpm = $store.bpm.max;
 	let seeds = $store.seeds;
-
-	$: updateMinBpm(minBpm);
-	$: updateMaxBpm(maxBpm);
-	$: seeds = $store.seeds;
 
 	async function handleGeneratePlaylist() {
 		const generatePlaylistLink = await generatePlaylist();
@@ -46,13 +34,17 @@
 	function openSpotifPlaylistLink() {
 		window.open(playlistLink, '_blank');
 	}
+
+	function test() {
+		console.log('test', $store);
+	}
 </script>
 
 <div class="w-screen h-screen overflow-y-scroll pt-8 pb-32 px-8 flex flex-col items-center">
 	<div class="w-full max-w-[400px]">
 		<BpmSection />
 
-		<ReferencesSection {seeds} />
+		<ReferencesSection />
 
 		<ChannelsSection />
 
@@ -63,6 +55,8 @@
 		<h2 class="h2 mt-16">[2] PLAYLIST</h2>
 
 		<PlaylistDataSection />
+
+		<button class="btn variant-filled-primary mt-8" on:click={test}> test </button>
 	</div>
 
 	<!-- <PlaylistDataInput /> -->

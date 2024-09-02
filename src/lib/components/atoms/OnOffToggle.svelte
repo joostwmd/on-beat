@@ -2,9 +2,7 @@
 	import onOffSwitchThumb from '$lib/icons/on-off-switch.svg';
 
 	export let isToggled: boolean = false;
-	function handleToggle() {
-		isToggled = !isToggled;
-	}
+	export let handleOnToggle: () => void;
 </script>
 
 <div class="flex">
@@ -16,7 +14,7 @@
 		<button
 			id="outline-toggle"
 			class="rounded w-full h-6 flex items-center relative overflow-hidden"
-			on:click={handleToggle}
+			on:click={handleOnToggle}
 		>
 			<img
 				src={onOffSwitchThumb}

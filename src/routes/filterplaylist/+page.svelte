@@ -7,8 +7,16 @@
 	import { transformSearchResultData } from '$lib/spotifyClient/constants';
 	import { filterPlaylists } from '$lib/spotifyClient/methods/filterPlaylists';
 	import { onMount } from 'svelte';
+	import BpmSection from '$lib/components/organisms/InputSections/BpmSection.svelte';
+	import ChannelsSection from '$lib/components/organisms/InputSections/ChannelsSection.svelte';
+	import KeySection from '$lib/components/organisms/InputSections/KeySection.svelte';
+	import OrderSection from '$lib/components/organisms/InputSections/OrderSection.svelte';
+	import PlaylistDataSection from '$lib/components/organisms/InputSections/PlaylistDataSection.svelte';
+	import Pad from '$lib/components/atoms/Pad.svelte';
+	import SpotifyItemCardSmall from '$lib/components/monecules/cards/SpotifyItemCardSmall.svelte';
+	import { goto } from '$app/navigation';
+	import store, { addPlaylist, removePlaylist } from '$lib/spotifyClient/store';
 
-	let selectedPlaylists: string[] = [];
 	let userPlaylists: any[] | null = null;
 	let playlistGenerated: boolean = false;
 	let playlistLink: string = '';
@@ -19,12 +27,19 @@
 	});
 
 	function handlePlaylistClick(playlist: any) {
-		console.log('selectedPlaylists', selectedPlaylists);
-		if (selectedPlaylists.includes(playlist.id)) {
-			selectedPlaylists = selectedPlaylists.filter((id) => id !== playlist.id);
+		if ($store.playlists.includes(playlist.id)) {
+			console.log('remove');
+			removePlaylist(playlist.id);
 		} else {
-			selectedPlaylists = [...selectedPlaylists, playlist.id];
+			console.log('add');
+			addPlaylist(playlist.id);
 		}
+
+		// if (selectedPlaylists.includes(playlist.id)) {
+		// 	selectedPlaylists = selectedPlaylists.filter((id) => id !== playlist.id);
+		// } else {
+		// 	selectedPlaylists = [...selectedPlaylists, playlist.id];
+		// }
 	}
 
 	async function handleFilterPlaylistClick() {
@@ -34,35 +49,62 @@
 		}, 1000);
 		return;
 	}
+
+	function test() {
+		console.log('test', $store.playlists);
+	}
 </script>
 
+<button on:click={() => goto('/generateplaylist')}>Create Playlist</button>
+
 {#if userPlaylists}
-	<div
-		class="w-screen h-screen bg-black overflow-y-scroll pt-8 px-8 pb-32 flex flex-col items-center"
-	>
-		<BpmInput />
+	<div class="w-screen h-screen overflow-y-scroll pt-8 pb-32 px-8 flex flex-col items-center">
+		<div class="w-full max-w-[400px]">
+			<BpmSection />
 
-		<h3 class="mt-8 text-center">pick one ore more playlist</h3>
+			<div class="mb-8 mt-8">
+				<div class="flex items-center justify-between">
+					<h4 class="h4">PLAYLISTS *</h4>
+				</div>
+				<p class="p text-gray-400 mt-4">select one or more playlists to filter out the music</p>
+			</div>
 
-		<div
-			class="w-full h-fit grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-center justify-items-center gap-y-8"
-		>
-			{#each userPlaylists as playlist}
-				<button on:click={() => handlePlaylistClick(playlist)}>
-					<SpotifyItemCard
-						data={transformSearchResultData(playlist, 'playlist')}
-						isSelected={selectedPlaylists.includes(playlist.id)}
-					/>
-				</button>
-			{/each}
+			<div class="flex flex-col space-y-2">
+				{#each userPlaylists as playlist}
+					<Pad
+						onClick={() => handlePlaylistClick(playlist)}
+						isSelected={$store.playlists.includes(playlist.id)}
+					>
+						<SpotifyItemCardSmall data={transformSearchResultData(playlist, 'playlist')} />
+					</Pad>
+				{/each}
+			</div>
+
+			<ChannelsSection />
+
+			<KeySection />
+
+			<OrderSection />
+
+			<h2 class="h2 mt-16">[2] PLAYLIST</h2>
+
+			<PlaylistDataSection />
+
+			<button class="btn variant-filled-primary mt-8" on:click={test}> test </button>
 		</div>
 
 		<!-- <PlaylistDataInput /> -->
 
-		<FabButton>
-			<button class="btn variant-filled-primary" on:click={handleFilterPlaylistClick}>
-				Filter Playlist
+		<!-- <FabButton>
+		{#if !playlistGenerated}
+			<button class="btn variant-filled-primary" on:click={handleGeneratePlaylist}>
+				Generate Playlist
 			</button>
-		</FabButton>
+		{:else if playlistGenerated}
+			<button class="btn variant-filled-primary" on:click={openSpotifPlaylistLink}>
+				Listen on Spotify
+			</button>
+		{/if}
+	</FabButton> -->
 	</div>
 {/if}

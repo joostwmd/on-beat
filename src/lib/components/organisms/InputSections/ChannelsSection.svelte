@@ -1,12 +1,9 @@
-<script>
+<script lang="ts">
+	import store from '$lib/spotifyClient/store';
 	import ChannelInput from '$lib/components/monecules/inputs/ChannelInput.svelte';
+	import type { TChannelTypes } from '$lib/spotifyClient/types';
 
-	const CHANNELS = [
-		{ channel: 'danceability', value: 50 },
-		{ channel: 'energy', value: 50 },
-		{ channel: 'liveness', value: 50 },
-		{ channel: 'speechiness', value: 50 }
-	];
+	const CHANNELS: TChannelTypes[] = ['danceability', 'energy', 'liveness', 'speechiness'];
 </script>
 
 <div class="mt-24 flex flex-col w-full">
@@ -21,8 +18,8 @@
 
 	<div class="mt-8">
 		<div class="grid grid-cols-2 gap-x-4 gap-y-8">
-			{#each CHANNELS as { channel, value }, i}
-				<ChannelInput {channel} {value} />
+			{#each CHANNELS as channel}
+				<ChannelInput {channel} />
 			{/each}
 		</div>
 	</div>

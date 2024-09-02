@@ -2,12 +2,6 @@
 	import TextInput from '$lib/components/atoms/input/TextInput.svelte';
 	import store from '$lib/spotifyClient/store';
 	import { updateName, updateDescription } from '$lib/spotifyClient/store';
-
-	let name = $store.name;
-	let description = $store.description;
-
-	$: updateName(name);
-	$: updateDescription(description);
 </script>
 
 <div class="w-full max-w-[400px] mt-24">
@@ -18,7 +12,7 @@
 				set the name of your playlist. you can change it later on spotify
 			</p>
 
-			<TextInput bind:value={name} placeholder="Name" />
+			<TextInput handleOnInput={updateName} value={$store.name} placeholder="Name" />
 		</div>
 	</div>
 
@@ -29,7 +23,11 @@
 				set the description of your playlist. you can change it later on spotify
 			</p>
 
-			<TextInput bind:value={description} placeholder="Description" />
+			<TextInput
+				handleOnInput={updateDescription}
+				value={$store.description}
+				placeholder="Description"
+			/>
 		</div>
 	</div>
 </div>

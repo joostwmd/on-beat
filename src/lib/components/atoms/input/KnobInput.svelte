@@ -1,36 +1,42 @@
 <script lang="ts">
 	import knob from '$lib/icons/knob.svg';
 	import knobOutline from '$lib/icons/knob-outline.svg';
-	export let isEnabled = true;
 
-	export let rotRange = 2 * Math.PI * 0.83;
-	export let pixelRange = 200;
-	export let startRotation = -Math.PI * 0.83;
-	export let min = 0;
-	export let max = 100;
-	export let value = 50;
+	// Define types for props
+	export let isEnabled: boolean = true;
+	export let value: number = 50;
+	export let handleOnInput: (newValue: number) => void; // New prop for handling input
+
+	let rotRange: number = 2 * Math.PI * 0.83;
+	let pixelRange: number = 200;
+	let startRotation: number = -Math.PI * 0.83;
+	let min: number = 0;
+	let max: number = 100;
+
 	let knobImageEl: HTMLImageElement;
-	let startY, startValue;
-	let isInteracting = false; // Flag to track active interaction
+	let startY: number, startValue: number;
+	let isInteracting: boolean = false;
 
 	$: valueRange = max - min;
 	$: rotation = startRotation + ((value - min) / valueRange) * rotRange;
 
-	function clamp(num, min, max) {
+	function clamp(num: number, min: number, max: number): number {
 		return Math.round(Math.max(min, Math.min(num, max)));
 	}
 
-	function touchMove(event) {
-		if (!isInteracting || !isEnabled) return; // Only proceed if actively interacting and enabled
-		event.preventDefault(); // Prevent default scroll behavior
+	function touchMove(event: TouchEvent): void {
+		if (!isInteracting || !isEnabled) return;
+		event.preventDefault();
 		const clientY = event.touches[0].clientY;
 		const valueDiff = (valueRange * (clientY - startY)) / pixelRange;
-		value = clamp(startValue - valueDiff, min, max);
+		const newValue = clamp(startValue - valueDiff, min, max);
+		value = newValue;
+		handleOnInput(newValue); // Call the handler with the new value
 	}
 
-	function touchStart(event) {
-		if (!isEnabled) return; // Only proceed if enabled
-		isInteracting = true; // Set interaction flag
+	function touchStart(event: TouchEvent): void {
+		if (!isEnabled) return;
+		isInteracting = true;
 		knobImageEl.classList.remove('knob-image-transition');
 		const clientY = event.touches[0].clientY;
 		startY = clientY;
@@ -39,25 +45,27 @@
 		window.addEventListener('touchend', touchEnd);
 	}
 
-	function touchEnd() {
-		isInteracting = false; // Clear interaction flag
+	function touchEnd(): void {
+		isInteracting = false;
 		window.removeEventListener('touchmove', touchMove);
 		window.removeEventListener('touchend', touchEnd);
 		knobImageEl.classList.add('knob-image-transition');
 	}
 
-	function pointerMove(event) {
-		if (!isInteracting || !isEnabled) return; // Only proceed if actively interacting and enabled
-		event.preventDefault(); // Prevent default scroll behavior
+	function pointerMove(event: PointerEvent): void {
+		if (!isInteracting || !isEnabled) return;
+		event.preventDefault();
 		knobImageEl.classList.remove('knob-image-transition');
 		const clientY = event.clientY;
 		const valueDiff = (valueRange * (clientY - startY)) / pixelRange;
-		value = clamp(startValue - valueDiff, min, max);
+		const newValue = clamp(startValue - valueDiff, min, max);
+		value = newValue;
+		handleOnInput(newValue); // Call the handler with the new value
 	}
 
-	function pointerDown(event) {
-		if (!isEnabled) return; // Only proceed if enabled
-		isInteracting = true; // Set interaction flag
+	function pointerDown(event: PointerEvent): void {
+		if (!isEnabled) return;
+		isInteracting = true;
 		knobImageEl.classList.remove('knob-image-transition');
 		const clientY = event.clientY;
 		startY = clientY;
@@ -66,8 +74,8 @@
 		window.addEventListener('pointerup', pointerUp);
 	}
 
-	function pointerUp() {
-		isInteracting = false; // Clear interaction flag
+	function pointerUp(): void {
+		isInteracting = false;
 		window.removeEventListener('pointermove', pointerMove);
 		window.removeEventListener('pointerup', pointerUp);
 		knobImageEl.classList.add('knob-image-transition');

@@ -97,3 +97,26 @@ export type TGenre = {
 };
 
 export type TSeed = TSpotifyItemCard | TGenre;
+
+export type TChannelVariants = 'energy' | 'danceability' | 'liveness' | 'speechiness';
+
+export type TBpm = {
+	min: number;
+	max: number;
+};
+
+export type TChannels = {
+	[key in TChannelTypes]: { value: number; active: boolean };
+};
+
+export type TKeySetting = {
+	value: string;
+	active: boolean;
+};
+
+export type TBpmOrderVariants = 'bpm-ascending' | 'bpm-descending' | null;
+
+export type TBpmOrderSetting = {
+	value: TBpmOrderVariants;
+	active: boolean;
+};

@@ -2,9 +2,17 @@
 	export let value: string;
 	export let placeholder: string;
 	export let disabled: boolean = false;
+	export let handleOnInput: (val: string) => void;
 </script>
 
-<input class="input" type="text" {placeholder} bind:value {disabled} />
+<input
+	on:input={(e) => handleOnInput(e.target.value)}
+	class="input"
+	type="text"
+	{placeholder}
+	bind:value
+	{disabled}
+/>
 
 <style>
 	.input {

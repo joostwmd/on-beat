@@ -1,17 +1,12 @@
 <script lang="ts">
 	import TextCard from '$lib/components/monecules/cards/TextCard.svelte';
-
-	export let bpmOrderVal: 'bpm-ascending' | 'bpm-descending';
-	export let isEnabled: boolean = false;
+	import store, { updateBpmOrderValue } from '$lib/spotifyClient/store';
 
 	let displayValue: string;
-
 	function handleClick(value: 'bpm-ascending' | 'bpm-descending') {
-		console.log('handle click', value, isEnabled);
-		if (isEnabled) {
+		if ($store.bpmOrder.active) {
 			displayValue = value;
-			value = bpmOrderVal;
-			console.log('new value', bpmOrderVal);
+			updateBpmOrderValue(value);
 		}
 	}
 </script>

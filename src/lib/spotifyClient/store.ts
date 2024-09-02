@@ -6,6 +6,7 @@ export type TStore = {
 	description: string;
 	bpm: TBpm;
 	seeds: TSeed[];
+	playlists: string[];
 	channels: TChannels;
 	bpmOrder: TBpmOrderSetting;
 	key: TKeySetting;
@@ -16,11 +17,12 @@ const initialState: TStore = {
 	description: '',
 	bpm: { min: 0, max: 0 },
 	seeds: [],
+	playlists: [],
 	channels: {
 		energy: { value: 0, active: false },
 		danceability: { value: 0, active: false },
 		liveness: { value: 0, active: false },
-		speechiness: { value: 0, active: false }
+		popularity: { value: 0, active: false }
 	},
 	bpmOrder: { value: null, active: false },
 	key: { value: 'C', active: false }
@@ -74,6 +76,19 @@ export function removeSeed(index: number) {
 	store.update((state) => {
 		const newSeeds = state.seeds.filter((_, i) => i !== index);
 		return { ...state, seeds: newSeeds };
+	});
+}
+
+export function addPlaylist(playlistId: string) {
+	store.update((state) => {
+		return { ...state, playlists: [...state.playlists, playlistId] };
+	});
+}
+
+export function removePlaylist(playlistId: string) {
+	store.update((state) => {
+		const newPlaylists = state.playlists.filter((id) => id !== playlistId);
+		return { ...state, playlists: newPlaylists };
 	});
 }
 

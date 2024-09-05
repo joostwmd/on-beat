@@ -81,7 +81,7 @@ export const myCustomTheme: CustomThemeConfig = {
 		'--color-error-200': '244 198 221', // #f4c6dd
 		'--color-error-300': '238 163 200', // #eea3c8
 		'--color-error-400': '225 94 159', // #e15e9f
-		'--color-error-500': '212 25 118', // #D41976
+		'--color-error-500': '199 51 57', // #D41976
 		'--color-error-600': '191 23 106', // #bf176a
 		'--color-error-700': '159 19 89', // #9f1359
 		'--color-error-800': '127 15 71', // #7f0f47

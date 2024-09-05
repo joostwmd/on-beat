@@ -3,10 +3,12 @@
 	export let value: number;
 	export let placeholder: string = '';
 	export let handleOnInput: (val: number) => void;
+	export let isError: boolean = false;
 </script>
 
 <input
-	class="input w-16 text-center"
+	class={'input w-16 text-center' + (isError ? ' input-error' : '')}
+	class:error={'input-error'}
 	type="number"
 	{placeholder}
 	bind:value

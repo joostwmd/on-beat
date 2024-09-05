@@ -110,7 +110,7 @@ export type TChannels = {
 };
 
 export type TKeySetting = {
-	value: string;
+	value: number;
 	active: boolean;
 };
 

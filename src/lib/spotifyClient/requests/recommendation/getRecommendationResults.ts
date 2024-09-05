@@ -1,36 +1,83 @@
 import { SPOTIFY_BASE_URL } from '$lib/spotifyClient/constants';
 import { getAuthHeader } from '../auth/getAuthHeader';
-import store from '$lib/spotifyClient/store';
 import { get } from 'svelte/store';
+import store from '$lib/spotifyClient/store';
 
-export async function getRecommendationResults(
-	market: string,
-	minBpm: number,
-	maxBpm: number,
-	seedParams: any
-): Promise<any> {
-	console.log('getRecommendationResults market', market);
+type TRecommendationParams = {
+	market: string;
+	minBpm: number;
+	maxBpm: number;
+	seeds: {
+		artists: string[];
+		tracks: string[];
+		genres: string[];
+	};
+	channels: {
+		danceability?: number;
+		energy?: number;
+		liveness?: number;
+		popularity?: number;
+	};
+	key?: string;
+};
+
+export async function getRecommendationResults(): Promise<any> {
+	const storeData = get(store);
+
+	const MARKET = 'DE';
 
 	const header: Headers = await getAuthHeader();
 
 	const url = new URL(`${SPOTIFY_BASE_URL}/recommendations`);
-	const parameters = {
+	const parameters: Record<string, any> = {
 		limit: 100,
-		market: market,
-		min_tempo: minBpm,
-		max_tempo: maxBpm,
-		...seedParams
+		market: MARKET,
+		min_tempo: storeData.bpm.min,
+		max_tempo: storeData.bpm.max,
+		seed_artists: storeData.seeds
+			.filter((seed) => seed.type === 'artist')
+			.map((seed) => seed.id)
+			.join(','),
+		seed_tracks: storeData.seeds
+			.filter((seed) => seed.type === 'track')
+			.map((seed) => seed.id)
+			.join(','),
+		seed_genres: storeData.seeds
+			.filter((seed) => seed.type === 'genre')
+			.map((seed) => seed.value)
+			.join(',')
 	};
 
-	Object.keys(parameters).forEach((key) =>
-		// @ts-ignore
-		url.searchParams.append(key, parameters[key])
-	);
+	if (storeData.channels.danceability.active) {
+		parameters.target_danceability = storeData.channels.danceability.value;
+	}
 
-	console.log('url', url);
+	if (storeData.channels.energy.active) {
+		parameters.target_energy = storeData.channels.energy.value;
+	}
+
+	if (storeData.channels.liveness.active) {
+		parameters.target_liveness = storeData.channels.liveness.value;
+	}
+
+	if (storeData.channels.popularity.active) {
+		parameters.target_popularity = storeData.channels.popularity.value;
+	}
+
+	if (storeData.key.active) {
+		parameters.target_key = storeData.key.value;
+	}
+
+	Object.entries(parameters).forEach(([key, value]) => {
+		if (value) {
+			url.searchParams.append(key, value);
+		}
+	});
+
+	console.log('url', url.toString());
 
 	try {
-		const res = await fetch(url, {
+		const res = await fetch(url.toString(), {
 			headers: header
 		});
 

@@ -1,6 +1,7 @@
+<svelte:options accessors />
+
 <script lang="ts">
 	import { MAX_BPM, MIN_BPM } from '$lib/spotifyClient/constants';
-
 	export let value: number;
 	export let handleOnInput: (val: number) => void;
 </script>
@@ -9,7 +10,7 @@
 	<input
 		id="vertical-slider"
 		type="range"
-		on:input={(e) => handleOnInput(e.target.value)}
+		on:input={(e) => handleOnInput(Number(e.target?.value))}
 		bind:value
 		min={MIN_BPM}
 		max={MAX_BPM}

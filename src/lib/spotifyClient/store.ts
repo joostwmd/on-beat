@@ -11,6 +11,7 @@ export type TStore = {
 	channels: TChannels;
 	bpmOrder: TBpmOrderSetting;
 	key: TKeySetting;
+	isPublic: boolean;
 };
 
 const initialState: TStore = {
@@ -26,7 +27,8 @@ const initialState: TStore = {
 		popularity: { value: 0, active: false }
 	},
 	bpmOrder: { value: null, active: false },
-	key: { value: 'C', active: false }
+	key: { value: 0, active: false },
+	isPublic: false
 };
 
 const store = writable(initialState);
@@ -154,6 +156,12 @@ export function updateKeyValue(value: TKeySetting['value']) {
 				value
 			}
 		};
+	});
+}
+
+export function togglePlaylistPublicState() {
+	store.update((state) => {
+		return { ...state, isPublic: !state.isPublic };
 	});
 }
 

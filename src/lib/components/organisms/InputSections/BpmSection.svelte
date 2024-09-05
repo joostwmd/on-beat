@@ -5,12 +5,15 @@
 	import type { TLedStatus } from '$lib/spotifyClient/types';
 
 	let status: TLedStatus = 'success';
+	let isError: boolean = false;
 
 	$: {
-		if ($store.bpm.min < $store.bpm.max) {
+		if ($store.bpm.min <= $store.bpm.max) {
 			status = 'success';
+			isError = false;
 		} else {
 			status = 'error';
+			isError = true;
 		}
 	}
 </script>
@@ -27,5 +30,5 @@
 		</p>
 	</div>
 
-	<BpmInput />
+	<BpmInput {isError} />
 </div>

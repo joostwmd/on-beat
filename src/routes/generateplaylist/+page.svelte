@@ -2,22 +2,20 @@
 	import FabButton from '$lib/components/FabButton.svelte';
 	import store from '$lib/spotifyClient/store';
 	import { generatePlaylist } from '$lib/spotifyClient/methods/generatePlaylist';
-
 	import ReferencesSection from '$lib/components/organisms/InputSections/ReferencesSection.svelte';
 	import BpmSection from '$lib/components/organisms/InputSections/BpmSection.svelte';
 	import ChannelsSection from '$lib/components/organisms/InputSections/ChannelsSection.svelte';
 	import KeySection from '$lib/components/organisms/InputSections/KeySection.svelte';
 	import OrderSection from '$lib/components/organisms/InputSections/OrderSection.svelte';
-	import PlaylistDataSection from '$lib/components/organisms/InputSections/PlaylistDataSection.svelte';
+	import PlaylistNameSection from '$lib/components/organisms/InputSections/PlaylistNameSection.svelte';
+	import PlaylistDescriptionSection from '$lib/components/organisms/InputSections/PlaylistDescriptionSection.svelte';
+	import PlaylistVisibilitySection from '$lib/components/organisms/InputSections/PlaylistVisibilitySection.svelte';
+	import { getRecommendationResults } from '$lib/spotifyClient/requests/recommendation/getRecommendationResults';
+	import { transformSearchResultData } from '$lib/spotifyClient/constants';
+	import SpotifyItemCardSmall from '$lib/components/monecules/cards/SpotifyItemCardSmall.svelte';
+	import Pad from '$lib/components/atoms/Pad.svelte';
 
-	let playlistGenerated: boolean = false;
 	let playlistLink: string = '';
-
-	let name = $store.name;
-	let description = $store.description;
-	let minBpm = $store.bpm.min;
-	let maxBpm = $store.bpm.max;
-	let seeds = $store.seeds;
 
 	async function handleGeneratePlaylist() {
 		const generatePlaylistLink = await generatePlaylist();
@@ -35,41 +33,73 @@
 		window.open(playlistLink, '_blank');
 	}
 
-	function test() {
-		console.log('test', $store);
+	let recommendedTracks;
+	async function handleGetRecommendations() {
+		const recommendations = await getRecommendationResults();
+		const transformedTracks = recommendations.tracks.map((track) =>
+			transformSearchResultData(track, 'track')
+		);
+		recommendedTracks = transformedTracks;
+		recommendationsFetched = true;
 	}
+
+	let recommendationsFetched: boolean = false;
+	let playlistGenerated: boolean = false;
 </script>
 
 <div class="w-screen h-screen overflow-y-scroll pt-8 pb-32 px-8 flex flex-col items-center">
 	<div class="w-full max-w-[400px]">
-		<BpmSection />
+		<!-- MUSIC RECOMMENDATIONS -->
+		<div>
+			<BpmSection />
+			<ReferencesSection />
+			<ChannelsSection />
+			<KeySection />
 
-		<ReferencesSection />
+			<button on:click={handleGetRecommendations} class="btn variant-filled-primary"
+				>get recommendations</button
+			>
+		</div>
 
-		<ChannelsSection />
+		{#if recommendationsFetched}
+			<!-- RECOMMENDED TRACKS -->
 
-		<KeySection />
+			<div>
+				<h1>recommended tracks component</h1>
 
-		<OrderSection />
+				<div class="space-y-4">
+					{#each recommendedTracks as track}
+						<Pad
+							onClick={() => {
+								return;
+							}}
+							isSelected={false}
+						>
+							<SpotifyItemCardSmall data={track} />
+						</Pad>
+					{/each}
+				</div>
+			</div>
 
-		<h2 class="h2 mt-16">[2] PLAYLIST</h2>
+			<!-- PLAYLIST DATA SECTION -->
 
-		<PlaylistDataSection />
+			<div>
+				<PlaylistNameSection />
+				<PlaylistDescriptionSection />
+				<PlaylistVisibilitySection />
+				<OrderSection />
 
-		<button class="btn variant-filled-primary mt-8" on:click={test}> test </button>
-	</div>
-
-	<!-- <PlaylistDataInput /> -->
-
-	<!-- <FabButton>
-		{#if !playlistGenerated}
-			<button class="btn variant-filled-primary" on:click={handleGeneratePlaylist}>
-				Generate Playlist
-			</button>
-		{:else if playlistGenerated}
-			<button class="btn variant-filled-primary" on:click={openSpotifPlaylistLink}>
-				Listen on Spotify
-			</button>
+				<button>create playlist</button>
+			</div>
 		{/if}
-	</FabButton> -->
+
+		{#if playlistGenerated}
+			<!-- PLAYLIST PREVIEW SECTION -->
+
+			<div>
+				<h1>playlist rpeview component</h1>
+				<button>listen on spotify</button>
+			</div>
+		{/if}
+	</div>
 </div>

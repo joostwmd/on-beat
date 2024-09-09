@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { handleGetSearchResult } from '$lib/spotifyClient';
-	import { ProgressRadial } from '@skeletonlabs/skeleton';
+	import { getModalStore, ProgressRadial } from '@skeletonlabs/skeleton';
 	import { goto } from '$app/navigation';
 
 	import { page } from '$app/stores';
@@ -13,6 +13,8 @@
 	import Pad from '$lib/components/atoms/Pad.svelte';
 	import SpotifyItemCardBig from '$lib/components/monecules/cards/SpotifyItemCardBig.svelte';
 	import TextCard from '$lib/components/monecules/cards/TextCard.svelte';
+	import Button from '$lib/components/atoms/Button.svelte';
+	import { handleInfoClick } from '$lib/spotifyClient/utils';
 
 	const type = $page.params.type as TSpotifyItems;
 
@@ -64,6 +66,8 @@
 			}, 300);
 		}
 	}
+
+	const modalStore = getModalStore();
 </script>
 
 <div class="w-full h-screen flex flex-col items-center relative">
@@ -81,12 +85,19 @@
 		{#if searchResults}
 			{#each searchResults as result}
 				<div class="m-auto">
-					<Pad
+					<SpotifyItemCardBig
+						data={transformSearchResultData(result, result.type)}
 						onClick={() => handleItemClick(result)}
 						isSelected={selectedItem && selectedItem.id === result.id}
 					>
-						<SpotifyItemCardBig data={transformSearchResultData(result, result.type)} />
-					</Pad>
+						<Button icon="plus" onClick={() => handleItemClick(result)} />
+
+						<Button
+							icon="info"
+							onClick={() =>
+								handleInfoClick(type, transformSearchResultData(result, result.type), modalStore)}
+						/>
+					</SpotifyItemCardBig>
 				</div>
 			{/each}
 		{/if}

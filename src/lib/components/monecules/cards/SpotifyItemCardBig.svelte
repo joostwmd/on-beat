@@ -28,7 +28,7 @@
 				</section>
 
 				<footer class="card-footer flex items-center justify-between p-0 mt-4">
-					<div class="w-4/5 flex flex-col items-start">
+					<div class="w-full flex flex-col items-start">
 						{#if data.subtitle}
 							<h6 class="h6 truncate text-surface-200 max-w-full" data-toc-ignore>
 								{data.subtitle}

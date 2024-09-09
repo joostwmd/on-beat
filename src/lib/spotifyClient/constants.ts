@@ -240,17 +240,35 @@ export function transformSearchResultData(
 		return {
 			type: 'track',
 			id: data.id,
+			uri: data.uri,
 			title: data.name,
+			album: data.album.name,
+			albumType: data.album.album_type,
+			popularity: data.popularity,
+			releaseDate: data.album.release_date,
 			subtitle: data.artists.map((artist: any) => artist.name).join(', '),
+			previewUrl: data.preview_url,
 			imageUrl:
 				data.album.images && data.album.images.length > 0
 					? data.album.images[0].url
 					: placeholderImageUrl
 		};
-	} else if (type === 'artist' || type === 'album' || type === 'playlist') {
+	} else if (type === 'artist') {
 		return {
 			type: type,
 			id: data.id,
+			uri: data.uri,
+			title: data.name,
+			imageUrl: imageUrl,
+			genres: data.genres,
+			followers: data.followers.total,
+			popularity: data.popularity
+		};
+	} else if (type === 'album' || type === 'playlist') {
+		return {
+			type: type,
+			id: data.id,
+			uri: data.uri,
 			title: data.name,
 			imageUrl: imageUrl
 		};

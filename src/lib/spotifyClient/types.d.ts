@@ -86,8 +86,10 @@ export type TSpotifyItems = 'track' | 'artist' | 'album' | 'playlist';
 export type TSpotifyItemCard = {
 	type: string;
 	id: string;
+	uri: string;
 	title: string;
 	subtitle?: string;
+	previewUrl?: string;
 	imageUrl: string;
 };
 

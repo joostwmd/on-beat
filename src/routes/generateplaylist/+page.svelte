@@ -1,6 +1,4 @@
 <script lang="ts">
-	import FabButton from '$lib/components/FabButton.svelte';
-	import store from '$lib/spotifyClient/store';
 	import { generatePlaylist } from '$lib/spotifyClient/methods/generatePlaylist';
 	import ReferencesSection from '$lib/components/organisms/InputSections/ReferencesSection.svelte';
 	import BpmSection from '$lib/components/organisms/InputSections/BpmSection.svelte';
@@ -12,43 +10,71 @@
 	import PlaylistVisibilitySection from '$lib/components/organisms/InputSections/PlaylistVisibilitySection.svelte';
 	import { getRecommendationResults } from '$lib/spotifyClient/requests/recommendation/getRecommendationResults';
 	import { transformSearchResultData } from '$lib/spotifyClient/constants';
-	import SpotifyItemCardSmall from '$lib/components/monecules/cards/SpotifyItemCardSmall.svelte';
-	import Pad from '$lib/components/atoms/Pad.svelte';
+	import TextCard from '$lib/components/monecules/cards/TextCard.svelte';
+	import Button from '$lib/components/atoms/Button.svelte';
+	import RecommendedTracksSection from '$lib/components/organisms/InputSections/RecommendedTracksSection.svelte';
+	import SpotifyItemCardBig from '$lib/components/monecules/cards/SpotifyItemCardBig.svelte';
 
-	let playlistLink: string = '';
+	import placeholderImage from '$lib/icons/spotify.svg';
+	import { getModalStore, type ModalSettings } from '@skeletonlabs/skeleton';
 
+	let generatedPlaylist: any;
 	async function handleGeneratePlaylist() {
-		const generatePlaylistLink = await generatePlaylist();
-		setTimeout(() => {
-			window.open(generatePlaylistLink, '_blank');
-		}, 1000);
-		return;
+		const recommendedTrackUris = recommendedTracks.map((track) => track.uri);
+		const trackIds = recommendedTracks.map((track) => track.id);
 
-		console.log('generatePlaylistLink', generatePlaylistLink);
-		playlistLink = generatePlaylistLink;
+		const playlist = await generatePlaylist(recommendedTrackUris, trackIds);
+
+		generatedPlaylist = playlist;
 		playlistGenerated = true;
+
+		console.log('generatedPlaylist', generatedPlaylist);
 	}
 
 	function openSpotifPlaylistLink() {
 		window.open(playlistLink, '_blank');
 	}
 
-	let recommendedTracks;
+	let recommendedTracks: any;
 	async function handleGetRecommendations() {
 		const recommendations = await getRecommendationResults();
 		const transformedTracks = recommendations.tracks.map((track) =>
 			transformSearchResultData(track, 'track')
 		);
 		recommendedTracks = transformedTracks;
+
 		recommendationsFetched = true;
 	}
 
 	let recommendationsFetched: boolean = false;
 	let playlistGenerated: boolean = false;
+
+	const modalStore = getModalStore();
+
+	function handleGeneratedPlaylistInfoClick() {
+		console.log('generatedPlaylist', generatedPlaylist);
+
+		const modal: ModalSettings = {
+			type: 'component',
+			component: 'playlistModal',
+			meta: {
+				isPublic: generatedPlaylist.public,
+				isCollaborative: generatedPlaylist.collaborative,
+				name: generatedPlaylist.name,
+				description: generatedPlaylist.description,
+				followers: generatedPlaylist.followers.total,
+				img: placeholderImage,
+				owner: generatedPlaylist.owner.display_name,
+				nuberOfTracks: generatedPlaylist.tracks.total
+			}
+		};
+
+		modalStore.trigger(modal);
+	}
 </script>
 
-<div class="w-screen h-screen overflow-y-scroll pt-8 pb-32 px-8 flex flex-col items-center">
-	<div class="w-full max-w-[400px]">
+<div class="w-screen h-screen overflow-y-scroll pt-8 pb-32 px-4 flex flex-col items-center">
+	<div class="w-full max-w-[800px]">
 		<!-- MUSIC RECOMMENDATIONS -->
 		<div>
 			<BpmSection />
@@ -56,30 +82,13 @@
 			<ChannelsSection />
 			<KeySection />
 
-			<button on:click={handleGetRecommendations} class="btn variant-filled-primary"
-				>get recommendations</button
-			>
+			<TextCard text={'get recommendations'} isSelected={true} onClick={handleGetRecommendations} />
 		</div>
 
 		{#if recommendationsFetched}
 			<!-- RECOMMENDED TRACKS -->
 
-			<div>
-				<h1>recommended tracks component</h1>
-
-				<div class="space-y-4">
-					{#each recommendedTracks as track}
-						<Pad
-							onClick={() => {
-								return;
-							}}
-							isSelected={false}
-						>
-							<SpotifyItemCardSmall data={track} />
-						</Pad>
-					{/each}
-				</div>
-			</div>
+			<RecommendedTracksSection {recommendedTracks} />
 
 			<!-- PLAYLIST DATA SECTION -->
 
@@ -88,9 +97,9 @@
 				<PlaylistDescriptionSection />
 				<PlaylistVisibilitySection />
 				<OrderSection />
-
-				<button>create playlist</button>
 			</div>
+
+			<TextCard text={'Create Playlist'} isSelected={true} onClick={handleGeneratePlaylist} />
 		{/if}
 
 		{#if playlistGenerated}
@@ -99,6 +108,21 @@
 			<div>
 				<h1>playlist rpeview component</h1>
 				<button>listen on spotify</button>
+
+				<SpotifyItemCardBig
+					data={{
+						imageUrl: placeholderImage,
+						title: generatedPlaylist.name,
+						subtitle: generatedPlaylist.description,
+						type: 'playlist',
+						id: generatedPlaylist.id,
+						uri: generatedPlaylist.uri
+					}}
+				/>
+
+				<Button icon="info" onClick={handleGeneratedPlaylistInfoClick} />
+
+				<TextCard text={'Liston On Spotify'} isSelected={true} onClick={handleGeneratePlaylist} />
 			</div>
 		{/if}
 	</div>

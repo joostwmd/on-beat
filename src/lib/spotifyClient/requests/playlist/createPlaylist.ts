@@ -1,7 +1,7 @@
 import { SPOTIFY_BASE_URL } from '$lib/spotifyClient/constants';
 import { getAuthHeader } from '../auth/getAuthHeader';
 
-export async function createPlaylist(name: string, description: string) {
+export async function createPlaylist(name: string, description: string, isPublic: boolean) {
 	const header: Headers = await getAuthHeader();
 	const userId = localStorage.getItem('user_id');
 
@@ -11,10 +11,11 @@ export async function createPlaylist(name: string, description: string) {
 		body: JSON.stringify({
 			name: name,
 			description: description,
-			public: false
+			public: isPublic
 		})
 	});
 
 	const data: any = await response.json();
+	console.log('createPlaylist', data);
 	return data;
 }

@@ -15,14 +15,14 @@
 		</section>
 
 		<footer class="card-footer flex items-center justify-between p-0 mt-4">
-			<div class="flex flex-col items-start">
+			<div class="w-4/5 flex flex-col items-start">
 				{#if data.subtitle}
-					<h6 class="h6 truncate text-surface-200" data-toc-ignore>
+					<h6 class="h6 truncate text-surface-200 max-w-full" data-toc-ignore>
 						{data.subtitle}
 					</h6>
 				{/if}
 
-				<h3 class="h3 truncate text-surface-200" data-toc-ignore>{data.title}</h3>
+				<h3 class="h3 truncate text-surface-200 max-w-full" data-toc-ignore>{data.title}</h3>
 			</div>
 
 			<img src={spotifyIcon} class="w-10 h-10" alt="spotify icon" />

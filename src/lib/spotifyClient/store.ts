@@ -12,6 +12,7 @@ export type TStore = {
 	bpmOrder: TBpmOrderSetting;
 	key: TKeySetting;
 	isPublic: boolean;
+	recommendedTracks?: any[];
 };
 
 const initialState: TStore = {
@@ -162,6 +163,12 @@ export function updateKeyValue(value: TKeySetting['value']) {
 export function togglePlaylistPublicState() {
 	store.update((state) => {
 		return { ...state, isPublic: !state.isPublic };
+	});
+}
+
+export function updateRecommendedTracks(tracks: any[]) {
+	store.update((state) => {
+		return { ...state, recommendedTracks: tracks };
 	});
 }
 

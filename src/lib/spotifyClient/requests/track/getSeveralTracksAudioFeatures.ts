@@ -10,5 +10,5 @@ export async function getSeveralTracksAudioFeatures(trackIds: string[]) {
 	);
 
 	const data: any = await response.json();
-	return data;
+	return data.audio_features;
 }

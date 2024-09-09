@@ -20,7 +20,7 @@
 	}
 </script>
 
-<div class="w-full h-full bg-neutral-950 flex flex-col items-center justify-center rounded-lg">
+<div class="w-full h-full bg-neutral-950 flex flex-col items-center justify-center rounded-lg z-10">
 	<h2 class="h2 mb-12">what do you want to add</h2>
 
 	<div class="max-x-88 space-y-4">

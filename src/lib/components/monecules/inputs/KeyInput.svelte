@@ -20,11 +20,11 @@
 </script>
 
 <div class="flex space-between">
-	<Button {isEnabled} onClick={handlePreviousKeyClick} icon="back" />
+	<Button {isEnabled} onClick={handlePreviousKeyClick} icon="arrowLeft" />
 	<div class="w-16 aspect-square">
 		<TextCard text={SPOTIFY_KEYS[$store.key.value]} isSelected={$store.key.active} />
 	</div>
-	<Button {isEnabled} onClick={handleNextKeyClick} icon="back" />
+	<Button {isEnabled} onClick={handleNextKeyClick} icon="arrowRight" />
 </div>
 
 <style>

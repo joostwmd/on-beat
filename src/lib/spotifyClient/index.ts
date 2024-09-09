@@ -57,9 +57,7 @@ export async function handleGetRecommendationResults(
 ) {
 	const market = localStorage.getItem('user_market');
 
-	const recommendationResults = await middleware(
-		async () => await getRecommendationResults(market!, minBpm, maxBpm, seedParams)
-	);
+	const recommendationResults = await middleware(async () => await getRecommendationResults());
 	return recommendationResults;
 }
 

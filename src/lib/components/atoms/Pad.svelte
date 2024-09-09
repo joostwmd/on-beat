@@ -3,7 +3,7 @@
 	export let isSelected: boolean = false;
 </script>
 
-<button class="w-full h-fit flex flex-col items-center jusitfy-center" on:click={onClick}>
+<button class="w-full h-fit" on:click={onClick}>
 	<div class="{isSelected ? 'selected' : 'bg-surface-400'} w-full h-full rounded-sm p-[2px]">
 		<div class="w-full h-full rounded-sm bg-black p-4 elevated">
 			<slot></slot>

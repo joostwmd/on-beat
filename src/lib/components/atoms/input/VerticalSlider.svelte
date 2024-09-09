@@ -42,7 +42,7 @@
 		-webkit-appearance: none;
 		width: 60px;
 		height: 28px;
-		background-image: url('/src/lib/icons/slider-thumb2.svg');
+		background-image: url('/src/lib/icons/slider-thumb.svg');
 		cursor: pointer; /* Cursor on hover over the thumb */
 		margin-top: -10px; /* Adjust this value to center the thumb on the track */
 		rotate: 90deg;
@@ -52,7 +52,7 @@
 	#vertical-slider::-moz-range-thumb {
 		width: 60px; /* Width of the thumb */
 		height: 28px; /* Height of the thumb */
-		background-image: url('/src/lib/icons/slider-thumb2.svg');
+		background-image: url('/src/lib/icons/slider-thumb.svg');
 		cursor: pointer; /* Cursor on hover over the thumb */
 		margin-top: -10px; /* Adjust this value to center the thumb on the track */
 		rotate: 90deg;

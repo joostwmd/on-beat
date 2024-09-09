@@ -18,7 +18,7 @@
 		</div>
 
 		<Pad {onClick} {isSelected}>
-			<div class="!bg-transparent max-w-[320px] p-4">
+			<div class="!bg-transparent max-w-[320px]">
 				<section class="p-0">
 					<img
 						src={data.imageUrl}

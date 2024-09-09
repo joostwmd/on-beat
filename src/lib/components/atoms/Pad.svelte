@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let onClick: () => void;
+	export let onClick: (item: any) => void;
 	export let isSelected: boolean = false;
 
 	console.log('isSelected', isSelected);
@@ -7,7 +7,7 @@
 
 <button class="w-full h-fit" on:click={onClick}>
 	<div class="{isSelected ? 'selected' : 'bg-surface-400'} w-full h-full rounded-sm p-[2px]">
-		<div class="w-full h-full rounded-sm bg-black elevated">
+		<div class="w-full h-full rounded-sm bg-black elevated p-4">
 			<slot></slot>
 		</div>
 	</div>

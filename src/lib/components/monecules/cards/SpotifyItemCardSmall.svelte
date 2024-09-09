@@ -19,7 +19,7 @@
 		</div>
 
 		<Pad {onClick} {isSelected}>
-			<div class="w-full h-fit p-4">
+			<div class="w-full h-fit">
 				<div class="w-full flex items-center">
 					<img
 						src={data.imageUrl}

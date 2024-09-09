@@ -6,6 +6,7 @@
 	import { getDrawerStore, getModalStore, type ModalSettings } from '@skeletonlabs/skeleton';
 	import store, { removeSeed } from '$lib/spotifyClient/store';
 	import { getTrackAudioFeatures } from '$lib/spotifyClient/requests/track/getTrackAudioFeatures';
+	import { handleInfoClick } from '$lib/spotifyClient/utils';
 
 	const drawerStore = getDrawerStore();
 	function openPickSeedTypeDrawer() {
@@ -19,53 +20,6 @@
 	}
 
 	const modalStore = getModalStore();
-
-	async function handleClickInfo(seed: any) {
-		console.log('seed', seed);
-
-		if (seed.type === 'artist') {
-			console.log('open artist data modal');
-
-			const modal: ModalSettings = {
-				type: 'component',
-				component: 'artistModal',
-				meta: {
-					title: seed.title,
-					img: seed.imageUrl,
-					genres: seed.genres,
-					followers: seed.followers,
-					popularity: seed.popularity
-				}
-			};
-
-			modalStore.trigger(modal);
-		} else if (seed.type === 'track') {
-			console.log('open track data modal');
-
-			const audioFeatures = await getTrackAudioFeatures(seed.id);
-
-			const modal: ModalSettings = {
-				type: 'component',
-				component: 'trackModal',
-				meta: {
-					img: seed.imageUrl,
-					title: seed.title,
-					artist: seed.subtitle,
-					album: seed.album,
-					albumType: seed.albumType,
-					releaseDate: seed.releaseDate,
-					duration: `${Math.floor(audioFeatures.duration_ms / 60000)}:${Math.floor((audioFeatures.duration_ms % 60000) / 1000)}`,
-					popularity: seed.popularity,
-					tempo: audioFeatures.tempo,
-					liveness: audioFeatures.liveness,
-					danceability: audioFeatures.danceability,
-					energy: audioFeatures.energy
-				}
-			};
-
-			modalStore.trigger(modal);
-		}
-	}
 </script>
 
 <div class="mt-24">
@@ -118,22 +72,20 @@
 
 							<Button icon="bin" onClick={() => removeSeed(i)} />
 						{:else}
-							<div class="w-5/6">
-								<Pad
-									isSelected={true}
-									onClick={() => {
-										return;
-									}}
-								>
-									<SpotifyItemCardSmall data={seed}></SpotifyItemCardSmall>
-								</Pad>
-							</div>
+							<SpotifyItemCardSmall
+								data={seed}
+								onClick={() => console.log('Test')}
+								isSelected={false}
+							>
+								<Button icon="info" onClick={() => handleInfoClick(seed.type, seed, modalStore)} />
+								<Button icon="bin" onClick={() => removeSeed(i)} />
+							</SpotifyItemCardSmall>
 
-							<div class="h-full flex flex-col space-y-4 justify-center">
+							<!-- <div class="h-full flex flex-col space-y-4 justify-center">
 								<Button icon="bin" onClick={() => removeSeed(i)} />
 
 								<Button icon="info" onClick={() => handleClickInfo(seed)} />
-							</div>
+							</div> -->
 						{/if}
 					</div>
 				{/each}

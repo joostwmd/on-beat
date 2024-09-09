@@ -1,11 +1,13 @@
 <script lang="ts">
 	export let onClick: () => void;
 	export let isSelected: boolean = false;
+
+	console.log('isSelected', isSelected);
 </script>
 
 <button class="w-full h-fit" on:click={onClick}>
 	<div class="{isSelected ? 'selected' : 'bg-surface-400'} w-full h-full rounded-sm p-[2px]">
-		<div class="w-full h-full rounded-sm bg-black p-4 elevated">
+		<div class="w-full h-full rounded-sm bg-black elevated">
 			<slot></slot>
 		</div>
 	</div>
@@ -21,5 +23,9 @@
 
 	.selected {
 		background: radial-gradient(circle, #e87757 0%, #ff3c06 100%);
+	}
+
+	.unselected {
+		border: red;
 	}
 </style>

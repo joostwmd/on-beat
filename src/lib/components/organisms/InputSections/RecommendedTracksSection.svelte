@@ -63,21 +63,10 @@
 <audio bind:this={audio} hidden></audio>
 
 <div class="mt-24">
-	<div class="space-y-4">
+	<div class="space-y-8">
 		{#each recommendedTracks as track}
 			<div class="w-full flex justify-between items-center">
-				<div class="w-5/6">
-					<Pad
-						onClick={() => {
-							return;
-						}}
-						isSelected={currentlyPlayedTrackId === track.id}
-					>
-						<SpotifyItemCardSmall data={track} />
-					</Pad>
-				</div>
-
-				<div class="h-full flex flex-col space-y-4 justify-center">
+				<SpotifyItemCardSmall data={track} isSelected={true} onClick={() => console.log('clock')}>
 					{#if track.previewUrl}
 						<Button
 							icon={currentlyPlayedTrackId === track.id && !audio.paused ? 'pause' : 'play'}
@@ -85,8 +74,10 @@
 						/>
 					{/if}
 
-					<Button icon="info" onClick={() => handleInfoClick(track)} />
-				</div>
+					<Button icon="bin" onClick={() => console.log('remove from list')} />
+
+					<Button icon="info" onClick={() => console.log('click info')} />
+				</SpotifyItemCardSmall>
 			</div>
 		{/each}
 	</div>

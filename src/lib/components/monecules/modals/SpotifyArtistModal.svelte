@@ -1,5 +1,7 @@
 <script lang="ts">
+	import Pad from '$lib/components/atoms/Pad.svelte';
 	import { getModalStore } from '@skeletonlabs/skeleton';
+	import spotifyIcon from '$lib/icons/spotify.svg';
 
 	type TSpotifyArtistModalData = {
 		title: string;
@@ -11,27 +13,45 @@
 
 	const modalStore = getModalStore();
 	const data: TSpotifyArtistModalData = $modalStore[0].meta;
-
-	console.log('modal artist data', data);
 </script>
 
-<div class="w-full h-full flex flex-col items-center justify-center bg-black">
-	<div
-		class="w-full max-w-[800px] h-full bg-black rounded-lg shadow-lg flex flex-col items-center justify-center"
-	>
-		<div class="w-full h-1/2 flex flex-col items-center justify-center">
-			<img class="w-1/2 h-1/2" src={data.img} alt="album cover" />
-			<h1 class="text-2xl font-bold">{data.title}</h1>
-			<h3 class="text-lg">Followers: {data.followers}</h3>
-			<h3 class="text-lg">Popularity: {data.popularity}</h3>
-
-			{#if data.genres.length > 0}
-				<div class="flex flex-wrap space-x-2">
-					{#each data.genres as genre}
-						<span class="text-sm bg-gray-800 text-white px-2 py-1 rounded-full">{genre}</span>
-					{/each}
-				</div>
-			{/if}
+<div class="w-full flex flex-col items-start">
+	<Pad isDisabled={true} isSelected={true}>
+		<div class="w-full flex justify-between mb-4">
+			<h4 class="h4">Spotify</h4>
+			<img src={spotifyIcon} class="w-8 h-8" alt="spotify icon" />
 		</div>
-	</div>
+		<div class="!bg-transparent max-w-[320px]">
+			<section class="p-0">
+				<img
+					src={data.img}
+					class="w-full aspect-square object-cover rounded-sm"
+					alt="track cover"
+				/>
+			</section>
+
+			<footer class="card-footer flex flex-col items-start justify-between p-0 mt-4">
+				<h3 class="h3 text-surface-200" data-toc-ignore>{data.title}</h3>
+
+				<div class="w-full flex-col items-start space-y-4 mt-12">
+					{#if data.genres.length > 0}
+						<div class="w-full flex justify-between items-center">
+							<h6 class="h6">Genres</h6>
+							<p class="p">{data.genres.join(', ')}</p>
+						</div>
+					{/if}
+
+					<div class="w-full flex justify-between items-center">
+						<h6 class="h6 text-surface-200">Followers</h6>
+						<p class="p text-surface-200">{data.followers}</p>
+					</div>
+
+					<div class="w-full flex justify-between items-center">
+						<h6 class="h6 text-surface-200">Popularity</h6>
+						<p class="p text-surface-200">{data.popularity}</p>
+					</div>
+				</div>
+			</footer>
+		</div>
+	</Pad>
 </div>

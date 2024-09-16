@@ -12,7 +12,7 @@ export type TStore = {
 	bpmOrder: TBpmOrderSetting;
 	key: TKeySetting;
 	isPublic: boolean;
-	recommendedTracks?: any[];
+	recommendedTracks: any[];
 };
 
 const initialState: TStore = {
@@ -29,7 +29,8 @@ const initialState: TStore = {
 	},
 	bpmOrder: { value: null, active: false },
 	key: { value: 0, active: false },
-	isPublic: false
+	isPublic: false,
+	recommendedTracks: []
 };
 
 const store = writable(initialState);
@@ -166,9 +167,16 @@ export function togglePlaylistPublicState() {
 	});
 }
 
-export function updateRecommendedTracks(tracks: any[]) {
+export function setRecommendedTracks(tracks: any[]) {
 	store.update((state) => {
 		return { ...state, recommendedTracks: tracks };
+	});
+}
+
+export function removeRecommendedTrack(track: any) {
+	store.update((state) => {
+		const newRecommendedTracks = state.recommendedTracks.filter((t) => t.id !== track.id);
+		return { ...state, recommendedTracks: newRecommendedTracks };
 	});
 }
 

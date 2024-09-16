@@ -17,6 +17,8 @@
 
 	import placeholderImage from '$lib/icons/spotify.svg';
 	import { getModalStore, type ModalSettings } from '@skeletonlabs/skeleton';
+	import { setRecommendedTracks } from '$lib/spotifyClient/store';
+	import { getSeveralTracksAudioFeatures } from '$lib/spotifyClient/requests/track/getSeveralTracksAudioFeatures';
 
 	let generatedPlaylist: any;
 	async function handleGeneratePlaylist() {
@@ -41,9 +43,29 @@
 		const transformedTracks = recommendations.tracks.map((track) =>
 			transformSearchResultData(track, 'track')
 		);
-		recommendedTracks = transformedTracks;
+
+		//setRecommendedTracks(transformedTracks);
+
+		const trackIds = transformedTracks.map((track) => track.id);
+
+		const audioFeatures = await getSeveralTracksAudioFeatures(trackIds);
+
+		const tracksWithAudioFeatures = transformedTracks.map((track) => {
+			const audioFeature = audioFeatures.find((audioFeature) => audioFeature.id === track.id);
+			return { ...track, ...audioFeature };
+		});
+
+		setRecommendedTracks(tracksWithAudioFeatures);
+
+		console.log('tracksWithAudioFeatures', tracksWithAudioFeatures);
 
 		recommendationsFetched = true;
+	}
+
+	async function getAudioFeatures() {
+		//const trackIds = recommendedTracks.map((track) => track.id);
+		//const audioFeatures = await getSeveralTracksAudioFeatures(trackIds);
+		//console.log('audioFeatures', audioFeatures);
 	}
 
 	let recommendationsFetched: boolean = false;
@@ -88,7 +110,7 @@
 		{#if recommendationsFetched}
 			<!-- RECOMMENDED TRACKS -->
 
-			<RecommendedTracksSection {recommendedTracks} />
+			<RecommendedTracksSection />
 
 			<!-- PLAYLIST DATA SECTION -->
 

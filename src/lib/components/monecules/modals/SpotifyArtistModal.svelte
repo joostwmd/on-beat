@@ -16,7 +16,7 @@
 </script>
 
 <div class="w-full flex flex-col items-start">
-	<Pad isDisabled={true} isSelected={true}>
+	<Pad isDisabled={true} isSelected={false}>
 		<div class="w-full flex justify-between mb-4">
 			<h4 class="h4">Spotify</h4>
 			<img src={spotifyIcon} class="w-8 h-8" alt="spotify icon" />

@@ -1,36 +1,77 @@
 <script lang="ts">
+	import Pad from '$lib/components/atoms/Pad.svelte';
 	import { getModalStore } from '@skeletonlabs/skeleton';
+	import spotifyIcon from '$lib/icons/spotify.svg';
 
 	type TSpotifyPlaylistModalData = {
-		isPublic: boolean;
-		isCollaborative: boolean;
-		name: string;
+		title: string;
 		description: string;
-		followers: number;
 		img: string;
 		owner: string;
-		nuberOfTracks: number;
+		numberOfTracks: number;
+		totalDuration: number;
+		followers: number;
 	};
 
 	const modalStore = getModalStore();
 	const data: TSpotifyPlaylistModalData = $modalStore[0].meta;
 
-	console.log('modal playllist data', data);
+	function msToTime(duration: number) {
+		let seconds: string | number = Math.floor((duration / 1000) % 60);
+		let minutes: string | number = Math.floor((duration / (1000 * 60)) % 60);
+		let hours: string | number = Math.floor((duration / (1000 * 60 * 60)) % 24);
+
+		hours = hours < 10 ? '0' + hours : hours;
+		minutes = minutes < 10 ? '0' + minutes : minutes;
+		seconds = seconds < 10 ? '0' + seconds : seconds;
+
+		return hours + ':' + minutes + ':' + seconds;
+	}
 </script>
 
-<div class="w-full h-full flex flex-col items-center justify-center bg-black">
-	<div
-		class="w-full max-w-[800px] h-full bg-black rounded-lg shadow-lg flex flex-col items-center justify-center"
-	>
-		<div class="w-full h-1/2 flex flex-col items-center justify-center">
-			<img class="w-1/2 h-1/2" src={data.img} alt="album cover" />
-			<h1 class="text-2xl font-bold">{data.name}</h1>
-			<h2 class="text-lg">{data.description}</h2>
-			<h3 class="text-lg">{data.followers}</h3>
-			<h3>isCollaborative {data.isCollaborative}</h3>
-			<h4 class="text-lg">owner : {data.owner}</h4>
-
-			<p>is public: {data.isPublic}</p>
+<div class="w-full flex flex-col items-start">
+	<Pad isDisabled={true} isSelected={false}>
+		<div class="w-full flex justify-between mb-4">
+			<h4 class="h4">Spotify</h4>
+			<img src={spotifyIcon} class="w-8 h-8" alt="spotify icon" />
 		</div>
-	</div>
+		<div class="!bg-transparent max-w-[320px]">
+			<section class="p-0">
+				<img
+					src={data.img}
+					class="w-full aspect-square object-cover rounded-sm"
+					alt="track cover"
+				/>
+			</section>
+
+			<footer class="card-footer flex flex-col items-start justify-between p-0 mt-4">
+				<h6 class="h6 text-surface-200 text-left" data-toc-ignore>
+					{data.title}
+				</h6>
+				<h3 class="h3 text-surface-200 text-left" data-toc-ignore>{data.description}</h3>
+
+				<div class="w-full flex-col items-start space-y-4 mt-12">
+					<div class="w-full flex justify-between items-center">
+						<h6 class="h6">Owner</h6>
+						<p class="p text-right w-10/12 break-words">{data.owner}</p>
+					</div>
+
+					<div class="w-full flex justify-between items-center">
+						<h6 class="h6">Number of Tracks</h6>
+						<p class="p">{data.numberOfTracks}</p>
+					</div>
+
+					<div class="w-full flex justify-between items-center">
+						<h6 class="h6">Duration</h6>
+						<p class="p">{msToTime(data.totalDuration)}</p>
+					</div>
+
+					<div class="w-full flex justify-between items-center">
+						<h6 class="h6">Followers</h6>
+						<p class="p">{data.followers}</p>
+					</div>
+				</div>
+			</footer>
+		</div>
+	</Pad>
 </div>

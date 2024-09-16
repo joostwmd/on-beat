@@ -222,6 +222,8 @@ export const SPOTIFY_AVAILABLE_GENRE_SEEDS = [
 	'world-music'
 ];
 
+export const SPOTIFY_KEYS = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+
 import placeholderImage from '$lib/icons/spotify.svg';
 
 export function transformSearchResultData(

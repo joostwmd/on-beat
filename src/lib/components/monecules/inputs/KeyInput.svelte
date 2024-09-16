@@ -1,11 +1,11 @@
 <script lang="ts">
 	import Button from '$lib/components/atoms/Button.svelte';
+	import { SPOTIFY_KEYS } from '$lib/spotifyClient/constants';
 	import store, { updateKeyValue } from '$lib/spotifyClient/store';
 	import TextCard from '../cards/TextCard.svelte';
 
 	export let isEnabled: boolean;
 
-	const SPOTIFY_KEYS = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 	let currentKeyIndex = 0;
 
 	function handleNextKeyClick() {

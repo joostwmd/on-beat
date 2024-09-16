@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Button from '$lib/components/atoms/Button.svelte';
 	import Pad from '$lib/components/atoms/Pad.svelte';
-	import spotifyIcon from '$lib/icons/spotify.svg';
 	import type { TSpotifyItemCard } from '$lib/spotifyClient/types';
 	export let data: TSpotifyItemCard | undefined;
 	export let onClick: () => void;
@@ -10,12 +9,8 @@
 
 {#if data}
 	<div class="w-full flex flex-col items-start">
-		<div class="w-full flex justify-between mb-4">
-			<img src={spotifyIcon} class="w-8 h-8" alt="spotify icon" />
-
-			<div class="flex space-x-2">
-				<slot></slot>
-			</div>
+		<div class="w-full flex items-center justify-between mb-4">
+			<slot></slot>
 		</div>
 
 		<Pad {onClick} {isSelected}>

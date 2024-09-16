@@ -1,5 +1,6 @@
 import { type ModalSettings, type ModalStore } from '@skeletonlabs/skeleton';
 import { getTrackAudioFeatures } from './requests/track/getTrackAudioFeatures';
+import { getPlaylistById } from './requests/playlist/getPlaylist';
 
 type TSpotifyItemVariants = 'track' | 'album' | 'artist' | 'playlist' | 'show' | 'episode';
 
@@ -27,7 +28,8 @@ export async function handleInfoClick(
 				tempo: audioFeatures.tempo,
 				liveness: audioFeatures.liveness,
 				danceability: audioFeatures.danceability,
-				energy: audioFeatures.energy
+				energy: audioFeatures.energy,
+				key: audioFeatures.key
 			}
 		};
 
@@ -44,6 +46,33 @@ export async function handleInfoClick(
 				genres: artist.genres,
 				followers: artist.followers,
 				popularity: artist.popularity
+			}
+		};
+
+		modalStore.trigger(modal);
+	} else if (type === 'playlist') {
+		const playlist = data;
+
+		const playlistMetaData = await getPlaylistById(playlist.id);
+		console.log('playlistMetaData', playlistMetaData);
+
+		const duration = playlistMetaData.tracks.items.reduce(
+			(acc: any, item: any) => acc + item.track.duration_ms,
+			0
+		);
+
+		const modal: ModalSettings = {
+			type: 'component',
+			component: 'playlistModal',
+			meta: {
+				title: playlist.title,
+				description: playlistMetaData.description,
+				img: playlistMetaData.images[0].url,
+				owner: playlistMetaData.owner.display_name,
+
+				numberOfTracks: playlistMetaData.tracks.total,
+				totalDuration: duration,
+				followers: playlistMetaData.followers.total
 			}
 		};
 

@@ -17,6 +17,7 @@
 	import { handleInfoClick } from '$lib/spotifyClient/utils';
 
 	const type = $page.params.type as TSpotifyItems;
+	//const type = 'playlist';
 
 	let isFetchingResults: boolean = false;
 	let query: string = '';
@@ -48,7 +49,6 @@
 			timeout = setTimeout(async () => {
 				isFetchingResults = true;
 				const data = await handleGetSearchResult(query, type);
-				console.log('data', data);
 
 				if (type === 'track') {
 					searchResults = data.tracks.items;

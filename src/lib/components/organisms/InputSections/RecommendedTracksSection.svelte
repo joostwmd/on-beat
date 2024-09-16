@@ -1,11 +1,12 @@
 <script lang="ts">
-	export let recommendedTracks: any;
-
 	import Button from '$lib/components/atoms/Button.svelte';
-	import Pad from '$lib/components/atoms/Pad.svelte';
 	import SpotifyItemCardSmall from '$lib/components/monecules/cards/SpotifyItemCardSmall.svelte';
-	import { getTrackAudioFeatures } from '$lib/spotifyClient/requests/track/getTrackAudioFeatures';
+	import { handleInfoClick } from '$lib/spotifyClient/utils';
 	import { getModalStore, type ModalSettings } from '@skeletonlabs/skeleton';
+	import store, { removeRecommendedTrack } from '$lib/spotifyClient/store';
+	import { SPOTIFY_KEYS } from '$lib/spotifyClient/constants';
+	import Frame from '$lib/components/atoms/Frame.svelte';
+	import spotifyIcon from '$lib/icons/spotify.svg';
 
 	let currentlyPlayedTrackId: string | null = null;
 	let audio: HTMLAudioElement;
@@ -29,54 +30,34 @@
 	}
 
 	const modalStore = getModalStore();
-
-	async function handleInfoClick(track: any) {
-		console.log('track', track);
-
-		const audioFeatures = await getTrackAudioFeatures(track.id);
-
-		console.log('audioFeatures', audioFeatures);
-
-		const modal: ModalSettings = {
-			type: 'component',
-			component: 'trackModal',
-			meta: {
-				img: track.imageUrl,
-				title: track.title,
-				artist: track.subtitle,
-				album: track.album,
-				albumType: track.albumType,
-				releaseDate: track.releaseDate,
-				duration: `${Math.floor(audioFeatures.duration_ms / 60000)}:${Math.floor((audioFeatures.duration_ms % 60000) / 1000)}`,
-				popularity: track.popularity,
-				tempo: audioFeatures.tempo,
-				liveness: audioFeatures.liveness,
-				danceability: audioFeatures.danceability,
-				energy: audioFeatures.energy
-			}
-		};
-
-		modalStore.trigger(modal);
-	}
 </script>
 
 <audio bind:this={audio} hidden></audio>
 
 <div class="mt-24">
 	<div class="space-y-8">
-		{#each recommendedTracks as track}
+		{#each $store.recommendedTracks as track}
 			<div class="w-full flex justify-between items-center">
 				<SpotifyItemCardSmall data={track} isSelected={true} onClick={() => console.log('clock')}>
-					{#if track.previewUrl}
-						<Button
-							icon={currentlyPlayedTrackId === track.id && !audio.paused ? 'pause' : 'play'}
-							onClick={() => handlePlayPauseClick(track.previewUrl, track.id)}
-						/>
-					{/if}
+					<div class="w-fit h-fit flex items-center">
+						<img src={spotifyIcon} class="w-8 h-8 mr-8" alt="spotify icon" />
 
-					<Button icon="bin" onClick={() => console.log('remove from list')} />
+						<p class="p text-gray-400 text-sm mr-2">{Math.floor(track.tempo)}</p>
+						<p class="p text-gray-400 text-sm">{SPOTIFY_KEYS[track.key]}</p>
+					</div>
 
-					<Button icon="info" onClick={() => console.log('click info')} />
+					<div class="flex space-x-2 items-center">
+						{#if track.previewUrl}
+							<Button
+								icon={currentlyPlayedTrackId === track.id && !audio.paused ? 'pause' : 'play'}
+								onClick={() => handlePlayPauseClick(track.previewUrl, track.id)}
+							/>
+						{/if}
+
+						<Button icon="bin" onClick={() => removeRecommendedTrack(track)} />
+
+						<Button icon="info" onClick={() => handleInfoClick('track', track, modalStore)} />
+					</div>
 				</SpotifyItemCardSmall>
 			</div>
 		{/each}

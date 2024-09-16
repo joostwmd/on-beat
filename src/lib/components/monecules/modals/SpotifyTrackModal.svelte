@@ -2,6 +2,7 @@
 	import Pad from '$lib/components/atoms/Pad.svelte';
 	import { getModalStore } from '@skeletonlabs/skeleton';
 	import spotifyIcon from '$lib/icons/spotify.svg';
+	import { SPOTIFY_KEYS } from '$lib/spotifyClient/constants';
 
 	type TSpotifyTrackModalData = {
 		img: string;
@@ -16,6 +17,7 @@
 		liveness: string;
 		danceability: string;
 		energy: string;
+		key: number;
 	};
 
 	const modalStore = getModalStore();
@@ -23,7 +25,7 @@
 </script>
 
 <div class="w-full flex flex-col items-start">
-	<Pad isDisabled={true} isSelected={true}>
+	<Pad isDisabled={true} isSelected={false}>
 		<div class="w-full flex justify-between mb-4">
 			<h4 class="h4">Spotify</h4>
 			<img src={spotifyIcon} class="w-8 h-8" alt="spotify icon" />
@@ -67,6 +69,11 @@
 					<div class="w-full flex justify-between items-center">
 						<h6 class="h6">Tempo</h6>
 						<p class="p">{data.tempo}</p>
+					</div>
+
+					<div class="w-full flex justify-between items-center">
+						<h6 class="h6">Key</h6>
+						<p class="p">{SPOTIFY_KEYS[data.key]}</p>
 					</div>
 
 					<div class="w-full flex justify-between items-center">

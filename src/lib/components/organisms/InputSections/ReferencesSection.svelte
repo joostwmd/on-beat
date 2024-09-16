@@ -7,6 +7,7 @@
 	import store, { removeSeed } from '$lib/spotifyClient/store';
 	import { getTrackAudioFeatures } from '$lib/spotifyClient/requests/track/getTrackAudioFeatures';
 	import { handleInfoClick } from '$lib/spotifyClient/utils';
+	import spotifyIcon from '$lib/icons/spotify.svg';
 
 	const drawerStore = getDrawerStore();
 	function openPickSeedTypeDrawer() {
@@ -59,7 +60,10 @@
 				{#each $store.seeds as seed, i}
 					<div class="flex items-center justify-between w-full">
 						{#if seed.type === 'genre'}
-							<div class="w-5/6">
+							<div class="w-full flex flex-col items-end">
+								<div class="mb-4">
+									<Button icon="bin" onClick={() => removeSeed(i)} />
+								</div>
 								<Pad
 									isSelected={true}
 									onClick={() => {
@@ -69,16 +73,22 @@
 									<h2>{seed.value}</h2>
 								</Pad>
 							</div>
-
-							<Button icon="bin" onClick={() => removeSeed(i)} />
 						{:else}
 							<SpotifyItemCardSmall
 								data={seed}
 								onClick={() => console.log('Test')}
 								isSelected={false}
 							>
-								<Button icon="info" onClick={() => handleInfoClick(seed.type, seed, modalStore)} />
-								<Button icon="bin" onClick={() => removeSeed(i)} />
+								<div class="w-full justify-between items-center flex">
+									<img src={spotifyIcon} class="w-8 h-8 mr-8" alt="spotify icon" />
+									<div class="flex space-x-2">
+										<Button
+											icon="info"
+											onClick={() => handleInfoClick(seed.type, seed, modalStore)}
+										/>
+										<Button icon="bin" onClick={() => removeSeed(i)} />
+									</div>
+								</div>
 							</SpotifyItemCardSmall>
 
 							<!-- <div class="h-full flex flex-col space-y-4 justify-center">

@@ -30,7 +30,7 @@ export async function getRecommendationResults(): Promise<any> {
 
 	const url = new URL(`${SPOTIFY_BASE_URL}/recommendations`);
 	const parameters: Record<string, any> = {
-		limit: 100,
+		limit: 50,
 		market: MARKET,
 		min_tempo: storeData.bpm.min,
 		max_tempo: storeData.bpm.max,
@@ -65,8 +65,11 @@ export async function getRecommendationResults(): Promise<any> {
 	}
 
 	if (storeData.key.active) {
-		parameters.target_key = storeData.key.value;
+		parameters.min_key = storeData.key.value;
+		parameters.max_key = storeData.key.value;
 	}
+
+	console.log('parameters', parameters);
 
 	Object.entries(parameters).forEach(([key, value]) => {
 		if (value) {

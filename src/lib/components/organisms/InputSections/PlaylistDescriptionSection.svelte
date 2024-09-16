@@ -8,8 +8,7 @@
 <div class="w-full mt-24">
 	<div class="mt-24">
 		<div class="w-full flex justify-between items-center mb-4">
-			<h4 class="h4">DESCRIPTION*</h4>
-			<StatusLed status={$store.description ? 'success' : 'error'} />
+			<h4 class="h4">DESCRIPTION</h4>
 		</div>
 
 		<p class="p text-gray-400 mb-8">description of playlist</p>

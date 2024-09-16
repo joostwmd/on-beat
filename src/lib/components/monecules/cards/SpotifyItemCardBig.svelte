@@ -4,7 +4,7 @@
 	import type { TSpotifyItemCard } from '$lib/spotifyClient/types';
 	export let data: TSpotifyItemCard | undefined;
 	export let isSelected: boolean = false;
-	export let onClick: (item: any) => void;
+	export let onClick: (item: any) => void = () => {};
 </script>
 
 {#if data}

@@ -19,6 +19,17 @@
 	import { getModalStore, type ModalSettings } from '@skeletonlabs/skeleton';
 	import { setRecommendedTracks } from '$lib/spotifyClient/store';
 	import { getSeveralTracksAudioFeatures } from '$lib/spotifyClient/requests/track/getSeveralTracksAudioFeatures';
+	import store from '$lib/spotifyClient/store';
+
+	let canGetRecommendations: boolean = false;
+
+	$: {
+		if ($store.bpm.min < $store.bpm.max && $store.seeds.length > 0) {
+			canGetRecommendations = true;
+		} else {
+			canGetRecommendations = false;
+		}
+	}
 
 	let generatedPlaylist: any;
 	async function handleGeneratePlaylist() {
@@ -44,8 +55,6 @@
 			transformSearchResultData(track, 'track')
 		);
 
-		//setRecommendedTracks(transformedTracks);
-
 		const trackIds = transformedTracks.map((track) => track.id);
 
 		const audioFeatures = await getSeveralTracksAudioFeatures(trackIds);
@@ -56,8 +65,6 @@
 		});
 
 		setRecommendedTracks(tracksWithAudioFeatures);
-
-		console.log('tracksWithAudioFeatures', tracksWithAudioFeatures);
 
 		recommendationsFetched = true;
 	}
@@ -104,7 +111,13 @@
 			<ChannelsSection />
 			<KeySection />
 
-			<TextCard text={'get recommendations'} isSelected={true} onClick={handleGetRecommendations} />
+			<div class="mt-12">
+				<TextCard
+					text={'get recommendations'}
+					isSelected={canGetRecommendations}
+					onClick={handleGetRecommendations}
+				/>
+			</div>
 		</div>
 
 		{#if recommendationsFetched}

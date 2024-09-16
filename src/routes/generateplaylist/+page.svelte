@@ -22,6 +22,7 @@
 	import store from '$lib/spotifyClient/store';
 
 	let canGetRecommendations: boolean = false;
+	let canGeneratePlaylist: boolean = false;
 
 	$: {
 		if ($store.bpm.min < $store.bpm.max && $store.seeds.length > 0) {
@@ -31,10 +32,18 @@
 		}
 	}
 
+	$: {
+		if ($store.recommendedTracks.length > 0 && $store.name.length > 0) {
+			canGeneratePlaylist = true;
+		} else {
+			canGeneratePlaylist = false;
+		}
+	}
+
 	let generatedPlaylist: any;
 	async function handleGeneratePlaylist() {
-		const recommendedTrackUris = recommendedTracks.map((track) => track.uri);
-		const trackIds = recommendedTracks.map((track) => track.id);
+		const recommendedTrackUris = $store.recommendedTracks.map((track) => track.uri);
+		const trackIds = $store.recommendedTracks.map((track) => track.id);
 
 		const playlist = await generatePlaylist(recommendedTrackUris, trackIds);
 
@@ -48,9 +57,9 @@
 		window.open(playlistLink, '_blank');
 	}
 
-	let recommendedTracks: any;
 	async function handleGetRecommendations() {
 		const recommendations = await getRecommendationResults();
+		console.log('recommendations', recommendations);
 		const transformedTracks = recommendations.tracks.map((track) =>
 			transformSearchResultData(track, 'track')
 		);
@@ -134,7 +143,13 @@
 				<OrderSection />
 			</div>
 
-			<TextCard text={'Create Playlist'} isSelected={true} onClick={handleGeneratePlaylist} />
+			<div class="mt-12">
+				<TextCard
+					text={'Create Playlist'}
+					isSelected={canGeneratePlaylist}
+					onClick={handleGeneratePlaylist}
+				/>
+			</div>
 		{/if}
 
 		{#if playlistGenerated}

@@ -8,7 +8,7 @@
 </script>
 
 {#if data}
-	<div class="w-full flex flex-col items-start">
+	<div class="w-full h-full flex flex-col items-start">
 		<div class="w-full flex justify-between mb-4">
 			<img src={spotifyIcon} class="w-8 h-8" alt="spotify icon" />
 
@@ -22,7 +22,7 @@
 				<section class="p-0">
 					<img
 						src={data.imageUrl}
-						class="w-full aspect-square object-cover rounded-sm"
+						class="w-full h-full aspect-square object-cover rounded-sm"
 						alt="track cover"
 					/>
 				</section>

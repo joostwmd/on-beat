@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { SPOTIFY_CLIENT_ID, SPOTIFY_REDIRECT_URI } from '$lib/spotifyClient/constants';
+	import { SPOTIFY_REDIRECT_URI } from '$lib/spotifyClient/constants';
 	import { getUserData } from '$lib/spotifyClient/methods/getUserMarket';
 	import { onMount } from 'svelte';
+	import { PUBLIC_SPOTIFY_CLIENT_ID } from '$env/static/public';
 
 	async function exchangeTokenForSession(code: string, codeVerifier: string): Promise<any> {
 		const body = new URLSearchParams({
-			client_id: SPOTIFY_CLIENT_ID,
+			client_id: PUBLIC_SPOTIFY_CLIENT_ID,
 			grant_type: 'authorization_code',
 			code,
 			redirect_uri: SPOTIFY_REDIRECT_URI,
@@ -54,7 +55,7 @@
 			localStorage.setItem('user_id', userData.userId);
 
 			if (session) {
-				goto('/home');
+				goto('/generateplaylist');
 			} else {
 				goto('/');
 			}

@@ -3,6 +3,8 @@ import { addItemsToPlaylist } from '../requests/playlist/addItemToPlaylist';
 import { createPlaylist } from '../requests/playlist/createPlaylist';
 import store from '../store';
 import { getSeveralTracksAudioFeatures } from '../requests/track/getSeveralTracksAudioFeatures';
+import { addCoverToPlaylist } from '../requests/playlist/addCoverToPlaylist';
+import { getPlaylistById } from '../requests/playlist/getPlaylist';
 
 export async function generatePlaylist(trackUris: string[], trackIds: string[]) {
 	const state = get(store);
@@ -20,15 +22,16 @@ export async function generatePlaylist(trackUris: string[], trackIds: string[]) 
 		}
 	}
 
-	console.log('uris', uris);
-
 	const name = state.name;
 	const description = state.description;
 	const playlistIsPublic = state.isPublic;
 
 	const playlist = await createPlaylist(name, description, playlistIsPublic);
-	const playlistId = playlist.id;
-	console.log('playlistId', playlistId);
-	await addItemsToPlaylist(playlistId, uris);
-	return playlist;
+
+	await addItemsToPlaylist(playlist.id, uris);
+	//await addCoverToPlaylist(playlist.id);
+
+	//refetch info to get image
+	const generatedPlaylist = await getPlaylistById(playlist.id);
+	return generatedPlaylist;
 }

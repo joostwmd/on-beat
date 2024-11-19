@@ -1,38 +1,31 @@
-# create-svelte
+# ON:BEAT - A Playlist Generator for DJs
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+Finding good new music on Spotify is hard, but finding the right tracks for your next gig is even harder. Your selections need to have a similar BPM, a fitting mood, and should match the vibe of your setlist. Luckily, Spotify's recommendation system allows you to find music that meets these criteria, but it's accessible only through the API, with no user-friendly interface. That's where **ON:BEAT** comes in—a simple website with an interface that will remind every DJ of their favorite tool: their controller.
 
-## Creating a project
+## How It Works
 
-If you're seeing this, you've probably already done this step. Congrats!
+1. **Sign in with your Spotify account.**
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+2. **Set a minimum and maximum BPM.**
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+3. **Add at least two reference tracks.**
 
-## Developing
+4. **Optionally, set additional filters to narrow down your search.**
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+5. **Click "Get Recommendations".**
 
-```bash
-npm run dev
+6. **Listen to the previews of the recommended tracks. You can remove songs that you don't like or already know.**
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+7. **Once satisfied with the recommendations, set a playlist name and description.**
 
-## Building
+8. **Click "Create Playlist", and you will be redirected to your new playlist once it is created.**
 
-To create a production version of your app:
+## Run Locally
 
-```bash
-npm run build
-```
+To run this project locally, you need a Spotify client ID. For guidance on how to obtain one, check out [Spotify's App Settings Guide](https://developer.spotify.com/documentation/general/guides/app-settings/#register-your-app).
 
-You can preview the production build with `npm run preview`.
+1. **Clone the repository:**
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+   ```bash
+   git clone https://github.com/yourusername/onbeat.git
+   ```

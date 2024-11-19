@@ -1,13 +1,10 @@
 <script>
-	import {
-		SPOTIFY_CLIENT_ID,
-		SPOTIFY_REDIRECT_URI,
-		SPOTIFY_SCOPES
-	} from '$lib/spotifyClient/constants';
+	import { SPOTIFY_REDIRECT_URI, SPOTIFY_SCOPES } from '$lib/spotifyClient/constants';
+	import { PUBLIC_SPOTIFY_CLIENT_ID } from '$env/static/public';
 	import turntable from '$lib/icons/turntable.svg';
 	import TextCard from './monecules/cards/TextCard.svelte';
 
-	let clientId = SPOTIFY_CLIENT_ID;
+	let clientId = PUBLIC_SPOTIFY_CLIENT_ID;
 	let redirectUri = SPOTIFY_REDIRECT_URI;
 	let scope = SPOTIFY_SCOPES.join(' ');
 	let url = 'https://accounts.spotify.com/api/token';
@@ -76,43 +73,19 @@
 	};
 </script>
 
-<div class="">
-	<div class="w-88">
+<div id="login-container">
+	<div class="w-80">
 		<TextCard text="login in with spotify" onClick={login} isSelected={true} />
-	</div>
-
-	<div id="turntables-wrap">
-		<div class="">
-			<img id="turntable-first" src={turntable} alt="turntable" />
-		</div>
-
-		<div class="">
-			<img id="turntable-second" src={turntable} alt="turntable" />
-		</div>
 	</div>
 </div>
 
 <style>
-	#turntables-wrap {
-		position: absolute;
-		top: 0;
-		left: 50%;
-		width: 100vw;
+	#login-container {
 		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-	}
-
-	#turntable-first {
-		animation: spin-clockwise 10s linear infinite;
-		width: 400px;
-		height: 400px;
-	}
-
-	#turntable-second {
-		animation: spin-anticlockwise 10s linear infinite;
-		width: 400px;
-		height: 400px;
+		justify-content: center;
+		align-items: center;
+		height: 100vh;
+		width: 100vw;
 	}
 
 	@keyframes spin-clockwise {

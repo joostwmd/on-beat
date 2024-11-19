@@ -1,4 +1,4 @@
-import { SPOTIFY_CLIENT_ID } from '$lib/spotifyClient/constants';
+import { PUBLIC_SPOTIFY_CLIENT_ID } from '$env/static/public';
 export async function refreshTokens() {
 	const refreshToken = localStorage.getItem('refresh_token');
 	const url = 'https://accounts.spotify.com/api/token';
@@ -11,7 +11,7 @@ export async function refreshTokens() {
 		body: new URLSearchParams({
 			grant_type: 'refresh_token',
 			refresh_token: refreshToken!,
-			client_id: SPOTIFY_CLIENT_ID
+			client_id: PUBLIC_SPOTIFY_CLIENT_ID
 		})
 	};
 

@@ -20,6 +20,8 @@
 	import { setRecommendedTracks } from '$lib/spotifyClient/store';
 	import { getSeveralTracksAudioFeatures } from '$lib/spotifyClient/requests/track/getSeveralTracksAudioFeatures';
 	import store from '$lib/spotifyClient/store';
+	import { addCoverToPlaylist } from '$lib/spotifyClient/requests/playlist/addCoverToPlaylist';
+	import { getPlaylistById } from '$lib/spotifyClient/requests/playlist/getPlaylist';
 
 	let canGetRecommendations: boolean = false;
 	let canGeneratePlaylist: boolean = false;
@@ -53,13 +55,12 @@
 		console.log('generatedPlaylist', generatedPlaylist);
 	}
 
-	function openSpotifPlaylistLink() {
-		window.open(playlistLink, '_blank');
+	function openSpotifyPlaylistLink() {
+		window.open(generatedPlaylist.external_urls.spotify, '_blank');
 	}
 
 	async function handleGetRecommendations() {
 		const recommendations = await getRecommendationResults();
-		console.log('recommendations', recommendations);
 		const transformedTracks = recommendations.tracks.map((track) =>
 			transformSearchResultData(track, 'track')
 		);
@@ -74,7 +75,6 @@
 		});
 
 		setRecommendedTracks(tracksWithAudioFeatures);
-
 		recommendationsFetched = true;
 	}
 
@@ -90,8 +90,6 @@
 	const modalStore = getModalStore();
 
 	function handleGeneratedPlaylistInfoClick() {
-		console.log('generatedPlaylist', generatedPlaylist);
-
 		const modal: ModalSettings = {
 			type: 'component',
 			component: 'playlistModal',
@@ -112,7 +110,7 @@
 </script>
 
 <div class="w-screen h-screen overflow-y-scroll pt-8 pb-32 px-4 flex flex-col items-center">
-	<div class="w-full max-w-[800px]">
+	<div class="w-full max-w-[600px]">
 		<!-- MUSIC RECOMMENDATIONS -->
 		<div>
 			<BpmSection />
@@ -132,7 +130,9 @@
 		{#if recommendationsFetched}
 			<!-- RECOMMENDED TRACKS -->
 
-			<RecommendedTracksSection />
+			<div id="recommended-tracks-section">
+				<RecommendedTracksSection />
+			</div>
 
 			<!-- PLAYLIST DATA SECTION -->
 
@@ -155,24 +155,24 @@
 		{#if playlistGenerated}
 			<!-- PLAYLIST PREVIEW SECTION -->
 
-			<div>
-				<h1>playlist rpeview component</h1>
-				<button>listen on spotify</button>
-
+			<div id="generated-playlist-section" class="mt-24 w-full">
 				<SpotifyItemCardBig
 					data={{
-						imageUrl: placeholderImage,
+						imageUrl: generatedPlaylist.images[0].url || placeholderImage,
 						title: generatedPlaylist.name,
 						subtitle: generatedPlaylist.description,
 						type: 'playlist',
 						id: generatedPlaylist.id,
 						uri: generatedPlaylist.uri
 					}}
-				/>
+				>
+					<Button icon="info" onClick={() => handleGeneratedPlaylistInfoClick()} />
+				</SpotifyItemCardBig>
 
-				<Button icon="info" onClick={handleGeneratedPlaylistInfoClick} />
-
-				<TextCard text={'Liston On Spotify'} isSelected={true} onClick={handleGeneratePlaylist} />
+				<div class="mt-12">
+					<TextCard text="Open Playlist" isSelected={true} onClick={openSpotifyPlaylistLink} />
+				</div>
+				<!-- Correctly closed div -->
 			</div>
 		{/if}
 	</div>
